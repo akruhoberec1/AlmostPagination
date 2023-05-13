@@ -1,0 +1,67 @@
+﻿@model List<MVC.Models.VehicleModelVM>
+@{
+    var sortOrder = ViewData["sortOrder"] as string;
+}
+
+
+<h1>Vehicle Models Admin View</h1>
+<br />
+
+<a asp-controller="VehicleModel" asp-action="Create" class="btn btn-primary">Create</a>
+
+<br />
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by any: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().Id)</a>
+            </th>
+
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().Name)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AbrvSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().Abrv)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MakeSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().MakeName)</a>
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mody in Model)
+        {
+            <tr>
+                <td>@mody.Id</td>
+                <td>@mody.Name</td>
+                <td>@mody.Abrv</td>
+                <td>@mody.MakeName</td>
+
+                <td>
+
+
+                    <a asp-controller="VehicleModel" asp-action="Edit" asp-route-id="@mody.Id">Edit</a>
+
+
+                    <form asp-controller="VehicleModel" asp-action="Delete" asp-route-id="@mody.Id" method="post" onsubmit="return confirm('You sure?')">
+                        <button type="submit">Delete</button>
+                    </form>
+   
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

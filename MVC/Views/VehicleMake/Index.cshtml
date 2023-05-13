@@ -1,0 +1,77 @@
+﻿@model PagedList.IPagedList<MVC.Models.VehicleMakeVM>
+@using PagedList;
+@using PagedList.Mvc;
+@using System.Web.Mvc;
+@using System.Web.Mvc.Html;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+<h1>Vehicle Makes</h1>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<br />
+
+
+
+<br />
+<a asp-controller="VehicleMake" asp-action="Create" class="btn btn-primary">Create</a>
+<br />
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by any: <input type="text" name="SearchString" value="@ViewBag.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.IdSortParm">@Html.DisplayNameFor(model => model.FirstOrDefault().Id)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSortParm">@Html.DisplayNameFor(model => model.FirstOrDefault().Name)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.AbrvSortParm">@Html.DisplayNameFor(model => model.FirstOrDefault().Abrv)</a>
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var make in Model)
+        {
+            <tr>
+                <td>@make.Id</td>
+                <td>@make.Name</td>
+                <td>@make.Abrv</td>
+                <td>
+
+
+                    <a asp-controller="VehicleMake" asp-action="Edit" asp-route-id="@make.Id">Edit</a>
+
+
+                    <form asp-controller="VehicleMake" asp-action="Delete" asp-route-id="@make.Id" method="post" onsubmit="return confirm('You sure?')">
+                        <button type="submit">Delete</button>
+                    </form>
+                    @*<a asp-controller="VehicleMake" asp-action="Delete" asp-route-id="@make.Id" >Delete</a> ***** ne radi bez submita *@
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@MvcHtmlString.Create(PagedList.Mvc.HtmlHelper.PagedListPager(Html, Model, page => Url.Action("Index",
+new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })))
+
